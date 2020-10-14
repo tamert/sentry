@@ -345,6 +345,108 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
     }
   }
 
+  getMeasurementBounds(
+    timestamp: number
+  ): {
+    warning: undefined | string;
+    left: undefined | number;
+    width: undefined | number;
+    isSpanVisibleInView: boolean;
+  } {
+    const {generateBounds} = this.props;
+
+    const bounds = generateBounds({
+      startTimestamp: timestamp,
+      endTimestamp: timestamp,
+    });
+
+    switch (bounds.type) {
+      case 'TRACE_TIMESTAMPS_EQUAL':
+      case 'INVALID_VIEW_WINDOW': {
+        return {
+          warning: undefined,
+          left: undefined,
+          width: undefined,
+          isSpanVisibleInView: bounds.isSpanVisibleInView,
+        };
+      }
+      case 'TIMESTAMPS_EQUAL': {
+        return {
+          warning: undefined,
+          left: bounds.start,
+          width: 0.00001,
+          isSpanVisibleInView: bounds.isSpanVisibleInView,
+        };
+      }
+      case 'TIMESTAMPS_REVERSED': {
+        return {
+          warning: undefined,
+          left: bounds.start,
+          width: bounds.end - bounds.start,
+          isSpanVisibleInView: bounds.isSpanVisibleInView,
+        };
+      }
+      case 'TIMESTAMPS_STABLE': {
+        return {
+          warning: void 0,
+          left: bounds.start,
+          width: bounds.end - bounds.start,
+          isSpanVisibleInView: bounds.isSpanVisibleInView,
+        };
+      }
+      default: {
+        const _exhaustiveCheck: never = bounds;
+        return _exhaustiveCheck;
+      }
+    }
+  }
+
+  getMeasurements() {
+    const {event} = this.props;
+
+    if (!event.measurements) {
+      return [];
+    }
+
+    return Object.keys(event.measurements)
+      .filter(name => name.startsWith('mark.'))
+      .map(name => {
+        return {
+          name,
+          timestamp: event.measurements![name].value,
+        };
+      });
+  }
+
+  renderMeasurements() {
+    const measurements = this.getMeasurements();
+
+    return (
+      <React.Fragment>
+        {measurements.map(measurement => {
+          const bounds = this.getMeasurementBounds(measurement.timestamp);
+
+          const shouldDisplay = defined(bounds.left) && defined(bounds.width);
+
+          console.log(measurement, bounds, shouldDisplay);
+
+          if (!shouldDisplay) {
+            return null;
+          }
+
+          return (
+            <MeasurementMarker
+              key={measurement.name}
+              style={{
+                left: toPercent(bounds.left || 0),
+              }}
+            />
+          );
+        })}
+      </React.Fragment>
+    );
+  }
+
   renderSpanTreeConnector({hasToggler}: {hasToggler: boolean}) {
     const {
       isLast,
@@ -802,6 +904,7 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
               </DurationPill>
             </SpanBarRectangle>
           )}
+          {this.renderMeasurements()}
           {this.renderCursorGuide()}
         </SpanRowCell>
         {!this.state.showDetail && (
@@ -1108,6 +1211,16 @@ export const SpanBarRectangle = styled('div')<{spanBarHatch: boolean}>`
   transition: border-color 0.15s ease-in-out;
   border-right: 1px solid rgba(0, 0, 0, 0);
   ${p => getHatchPattern(p, '#dedae3', '#f4f2f7')}
+`;
+
+const MeasurementMarker = styled('div')`
+  position: absolute;
+  top: 0;
+  height: ${SPAN_ROW_HEIGHT}px;
+  width: 1px;
+  user-select: none;
+
+  background-color: ${p => p.theme.gray800};
 `;
 
 const StyledIconWarning = styled(IconWarning)`
