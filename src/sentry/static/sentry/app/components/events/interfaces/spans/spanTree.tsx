@@ -367,6 +367,13 @@ class SpanTree extends React.Component<PropType> {
       return null;
     }
 
+    const hasMeasurements = Object.keys(event.measurements ?? {}).length > 0;
+
+    // only display the secondary header if there are any measurements
+    if (!hasMeasurements) {
+      return null;
+    }
+
     return (
       <DividerHandlerManager.Consumer>
         {(
