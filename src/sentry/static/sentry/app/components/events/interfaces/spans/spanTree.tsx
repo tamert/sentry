@@ -385,7 +385,7 @@ class SpanTree extends React.Component<PropType> {
               <ZoomControlPanel
                 style={{
                   // the width of this panel is extended to include the width of the divider line
-                  width: `calc(${toPercent(dividerPosition)} + 1px)`,
+                  width: `calc(${toPercent(dividerPosition)} - 0.5px)`,
                 }}
               />
               <MeasurementsPanel event={event} />

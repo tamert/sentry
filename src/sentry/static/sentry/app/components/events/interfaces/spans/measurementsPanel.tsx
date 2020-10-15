@@ -22,6 +22,10 @@ class MeasurementsPanel extends React.PureComponent<Props> {
 
 const Container = styled('div')`
   position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+
+  background-color: red;
 `;
 
 export default MeasurementsPanel;
