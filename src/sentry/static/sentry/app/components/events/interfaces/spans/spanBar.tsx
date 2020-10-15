@@ -16,6 +16,7 @@ import {
   toPercent,
   SpanBoundsType,
   SpanGeneratedBoundsType,
+  SpanViewBoundsType,
   getHumanDuration,
   getSpanID,
   getSpanOperation,
@@ -283,12 +284,7 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
     );
   }
 
-  getBounds(): {
-    warning: undefined | string;
-    left: undefined | number;
-    width: undefined | number;
-    isSpanVisibleInView: boolean;
-  } {
+  getBounds(): SpanViewBoundsType {
     const {event, span, generateBounds} = this.props;
 
     const bounds = generateBounds({

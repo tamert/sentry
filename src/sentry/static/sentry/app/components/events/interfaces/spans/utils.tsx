@@ -120,6 +120,13 @@ export type SpanGeneratedBoundsType =
       isSpanVisibleInView: boolean;
     };
 
+export type SpanViewBoundsType = {
+  warning: undefined | string;
+  left: undefined | number;
+  width: undefined | number;
+  isSpanVisibleInView: boolean;
+};
+
 const normalizeTimestamps = (spanBounds: SpanBoundsType): SpanBoundsType => {
   const {startTimestamp, endTimestamp} = spanBounds;
 
@@ -628,12 +635,7 @@ export function getMeasurements(event: SentryTransactionEvent) {
 export function getMeasurementBounds(
   timestamp: number,
   generateBounds: (bounds: SpanBoundsType) => SpanGeneratedBoundsType
-): {
-  warning: undefined | string;
-  left: undefined | number;
-  width: undefined | number;
-  isSpanVisibleInView: boolean;
-} {
+): SpanViewBoundsType {
   const bounds = generateBounds({
     startTimestamp: timestamp,
     endTimestamp: timestamp,
