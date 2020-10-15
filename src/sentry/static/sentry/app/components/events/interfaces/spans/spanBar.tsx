@@ -24,6 +24,8 @@ import {
   isOrphanTreeDepth,
   isEventFromBrowserJavaScriptSDK,
   durationlessBrowserOps,
+  getMeasurements,
+  getMeasurementBounds,
 } from './utils';
 import {ParsedTraceType, ProcessedSpanType, TreeDepthType} from './types';
 import {
@@ -351,92 +353,19 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
     }
   }
 
-  getMeasurementBounds(
-    timestamp: number
-  ): {
-    warning: undefined | string;
-    left: undefined | number;
-    width: undefined | number;
-    isSpanVisibleInView: boolean;
-  } {
-    const {generateBounds} = this.props;
-
-    const bounds = generateBounds({
-      startTimestamp: timestamp,
-      endTimestamp: timestamp,
-    });
-
-    switch (bounds.type) {
-      case 'TRACE_TIMESTAMPS_EQUAL':
-      case 'INVALID_VIEW_WINDOW': {
-        return {
-          warning: undefined,
-          left: undefined,
-          width: undefined,
-          isSpanVisibleInView: bounds.isSpanVisibleInView,
-        };
-      }
-      case 'TIMESTAMPS_EQUAL': {
-        return {
-          warning: undefined,
-          left: bounds.start,
-          width: 0.00001,
-          isSpanVisibleInView: bounds.isSpanVisibleInView,
-        };
-      }
-      case 'TIMESTAMPS_REVERSED': {
-        return {
-          warning: undefined,
-          left: bounds.start,
-          width: bounds.end - bounds.start,
-          isSpanVisibleInView: bounds.isSpanVisibleInView,
-        };
-      }
-      case 'TIMESTAMPS_STABLE': {
-        return {
-          warning: void 0,
-          left: bounds.start,
-          width: bounds.end - bounds.start,
-          isSpanVisibleInView: bounds.isSpanVisibleInView,
-        };
-      }
-      default: {
-        const _exhaustiveCheck: never = bounds;
-        return _exhaustiveCheck;
-      }
-    }
-  }
-
-  getMeasurements() {
-    const {event} = this.props;
-
-    if (!event.measurements) {
-      return [];
-    }
-
-    return Object.keys(event.measurements)
-      .filter(name => name.startsWith('mark.'))
-      .map(name => {
-        return {
-          name,
-          timestamp: event.measurements![name].value,
-        };
-      });
-  }
-
   renderMeasurements() {
-    const {organization} = this.props;
+    const {organization, event, generateBounds} = this.props;
 
     if (!organization.features.includes('measurements')) {
       return null;
     }
 
-    const measurements = this.getMeasurements();
+    const measurements = getMeasurements(event);
 
     return (
       <React.Fragment>
         {measurements.map(measurement => {
-          const bounds = this.getMeasurementBounds(measurement.timestamp);
+          const bounds = getMeasurementBounds(measurement.timestamp, generateBounds);
 
           const shouldDisplay = defined(bounds.left) && defined(bounds.width);
 

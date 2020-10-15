@@ -1,12 +1,27 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-class MeasurementsPanel extends React.PureComponent {
+import {SentryTransactionEvent} from 'app/types';
+
+import {getMeasurements} from './utils';
+
+type Props = {
+  event: SentryTransactionEvent;
+};
+class MeasurementsPanel extends React.PureComponent<Props> {
   render() {
+    const {event} = this.props;
+
+    const measurements = getMeasurements(event);
+
+    console.log('measurements', measurements);
+
     return <Container>measurements</Container>;
   }
 }
 
-const Container = styled('div')``;
+const Container = styled('div')`
+  position: relative;
+`;
 
 export default MeasurementsPanel;

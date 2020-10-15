@@ -609,3 +609,73 @@ export function isEventFromBrowserJavaScriptSDK(event: SentryTransactionEvent): 
 // PerformanceMark: Duration is 0 as per https://developer.mozilla.org/en-US/docs/Web/API/PerformanceMark
 // PerformancePaintTiming: Duration is 0 as per https://developer.mozilla.org/en-US/docs/Web/API/PerformancePaintTiming
 export const durationlessBrowserOps = ['mark', 'paint'];
+
+export function getMeasurements(event: SentryTransactionEvent) {
+  if (!event.measurements) {
+    return [];
+  }
+
+  return Object.keys(event.measurements)
+    .filter(name => name.startsWith('mark.'))
+    .map(name => {
+      return {
+        name,
+        timestamp: event.measurements![name].value,
+      };
+    });
+}
+
+export function getMeasurementBounds(
+  timestamp: number,
+  generateBounds: (bounds: SpanBoundsType) => SpanGeneratedBoundsType
+): {
+  warning: undefined | string;
+  left: undefined | number;
+  width: undefined | number;
+  isSpanVisibleInView: boolean;
+} {
+  const bounds = generateBounds({
+    startTimestamp: timestamp,
+    endTimestamp: timestamp,
+  });
+
+  switch (bounds.type) {
+    case 'TRACE_TIMESTAMPS_EQUAL':
+    case 'INVALID_VIEW_WINDOW': {
+      return {
+        warning: undefined,
+        left: undefined,
+        width: undefined,
+        isSpanVisibleInView: bounds.isSpanVisibleInView,
+      };
+    }
+    case 'TIMESTAMPS_EQUAL': {
+      return {
+        warning: undefined,
+        left: bounds.start,
+        width: 0.00001,
+        isSpanVisibleInView: bounds.isSpanVisibleInView,
+      };
+    }
+    case 'TIMESTAMPS_REVERSED': {
+      return {
+        warning: undefined,
+        left: bounds.start,
+        width: bounds.end - bounds.start,
+        isSpanVisibleInView: bounds.isSpanVisibleInView,
+      };
+    }
+    case 'TIMESTAMPS_STABLE': {
+      return {
+        warning: void 0,
+        left: bounds.start,
+        width: bounds.end - bounds.start,
+        isSpanVisibleInView: bounds.isSpanVisibleInView,
+      };
+    }
+    default: {
+      const _exhaustiveCheck: never = bounds;
+      return _exhaustiveCheck;
+    }
+  }
+}

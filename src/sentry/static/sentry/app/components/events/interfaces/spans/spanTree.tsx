@@ -361,7 +361,7 @@ class SpanTree extends React.Component<PropType> {
   };
 
   renderSecondaryPanel() {
-    const {organization} = this.props;
+    const {organization, event} = this.props;
 
     if (!organization.features.includes('measurements')) {
       return null;
@@ -388,7 +388,7 @@ class SpanTree extends React.Component<PropType> {
                   width: `calc(${toPercent(dividerPosition)} + 1px)`,
                 }}
               />
-              <MeasurementsPanel />
+              <MeasurementsPanel event={event} />
             </SecondaryHeader>
           );
         }}
