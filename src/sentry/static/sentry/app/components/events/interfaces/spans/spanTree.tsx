@@ -33,6 +33,7 @@ import {SpanRowMessage} from './styles';
 import * as DividerHandlerManager from './dividerHandlerManager';
 import {FilterSpans} from './traceView';
 import {ActiveOperationFilter} from './filter';
+import MeasurementsPanel from './measurementsPanel';
 
 type RenderedSpanTree = {
   spanTree: JSX.Element | null;
@@ -374,6 +375,10 @@ class SpanTree extends React.Component<PropType> {
 
     return (
       <DividerHandlerManager.Provider interactiveLayerRef={this.traceViewRef}>
+        <SecondaryHeader>
+          <ZoomControlPanel> zoom</ZoomControlPanel>
+          <MeasurementsPanel />
+        </SecondaryHeader>
         <TraceViewContainer ref={this.traceViewRef}>
           {spanTree}
           {infoMessage}
@@ -387,6 +392,15 @@ const TraceViewContainer = styled('div')`
   overflow-x: hidden;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+
+  outline: 1px solid red;
 `;
+
+const SecondaryHeader = styled('div')`
+  background-color: ${p => p.theme.gray100};
+  display: flex;
+`;
+
+const ZoomControlPanel = styled('div')``;
 
 export default SpanTree;
