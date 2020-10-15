@@ -333,17 +333,23 @@ class SpanTree extends React.Component<PropType> {
     };
   };
 
-  renderRootSpan = (): RenderedSpanTree => {
+  generateBounds() {
     const {dragProps, trace} = this.props;
 
-    const rootSpan: RawSpanType = generateRootSpan(trace);
-
-    const generateBounds = boundsGenerator({
+    return boundsGenerator({
       traceStartTimestamp: trace.traceStartTimestamp,
       traceEndTimestamp: trace.traceEndTimestamp,
       viewStart: dragProps.viewWindowStart,
       viewEnd: dragProps.viewWindowEnd,
     });
+  }
+
+  renderRootSpan = (): RenderedSpanTree => {
+    const {trace} = this.props;
+
+    const rootSpan: RawSpanType = generateRootSpan(trace);
+
+    const generateBounds = this.generateBounds();
 
     return this.renderSpan({
       isRoot: true,
@@ -388,7 +394,7 @@ class SpanTree extends React.Component<PropType> {
                   width: `calc(${toPercent(dividerPosition)} - 0.5px)`,
                 }}
               />
-              <MeasurementsPanel event={event} />
+              <MeasurementsPanel event={event} generateBounds={this.generateBounds()} />
             </SecondaryHeader>
           );
         }}
