@@ -425,6 +425,12 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
   }
 
   renderMeasurements() {
+    const {organization} = this.props;
+
+    if (!organization.features.includes('measurements')) {
+      return null;
+    }
+
     const measurements = this.getMeasurements();
 
     return (
