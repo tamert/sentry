@@ -31,7 +31,13 @@ import {
   MINIMAP_SPAN_BAR_HEIGHT,
   NUM_OF_SPANS_FIT_IN_MINI_MAP,
 } from './header';
-import {SPAN_ROW_HEIGHT, SpanRow, zIndex, getHatchPattern} from './styles';
+import {
+  SPAN_ROW_HEIGHT,
+  SPAN_ROW_PADDING,
+  SpanRow,
+  zIndex,
+  getHatchPattern,
+} from './styles';
 import * as DividerHandlerManager from './dividerHandlerManager';
 import * as CursorGuideHandler from './cursorGuideHandler';
 import SpanDetail from './spanDetail';
@@ -890,8 +896,8 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
               spanBarHatch={!!spanBarHatch}
               style={{
                 backgroundColor: spanBarColour,
-                left: toPercent(bounds.left || 0),
-                width: toPercent(bounds.width || 0),
+                left: `calc(${toPercent(bounds.left || 0)} + 1px)`,
+                width: `calc(${toPercent(bounds.width || 0)} - 2px)`,
               }}
             >
               <DurationPill
@@ -965,7 +971,6 @@ type SpanRowCellProps = OmitHtmlDivProps<{
 
 export const SpanRowCell = styled('div')<SpanRowCellProps>`
   position: relative;
-  padding: ${space(0.5)} 1px;
   height: 100%;
   overflow: hidden;
   background-color: ${p => getBackgroundColor(p)};
@@ -1204,12 +1209,13 @@ const DurationPill = styled('div')<{
 `;
 
 export const SpanBarRectangle = styled('div')<{spanBarHatch: boolean}>`
-  position: relative;
-  height: 100%;
+  position: absolute;
+  height: ${SPAN_ROW_HEIGHT - 2 * SPAN_ROW_PADDING}px;
+  top: ${SPAN_ROW_PADDING}px;
+  left: 0;
   min-width: 1px;
   user-select: none;
   transition: border-color 0.15s ease-in-out;
-  border-right: 1px solid rgba(0, 0, 0, 0);
   ${p => getHatchPattern(p, '#dedae3', '#f4f2f7')}
 `;
 
