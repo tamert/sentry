@@ -434,8 +434,6 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
 
           const shouldDisplay = defined(bounds.left) && defined(bounds.width);
 
-          console.log(measurement, bounds, shouldDisplay);
-
           if (!shouldDisplay) {
             return null;
           }
