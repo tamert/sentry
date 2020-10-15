@@ -442,7 +442,7 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
             <MeasurementMarker
               key={measurement.name}
               style={{
-                left: toPercent(bounds.left || 0),
+                left: `calc(${toPercent(bounds.left || 0)} + 1px)`,
               }}
             />
           );
