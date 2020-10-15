@@ -26,6 +26,7 @@ import {
   isGapSpan,
   isOrphanSpan,
   isEventFromBrowserJavaScriptSDK,
+  toPercent,
 } from './utils';
 import {DragManagerChildrenProps} from './dragManager';
 import SpanGroup from './spanGroup';
@@ -359,6 +360,35 @@ class SpanTree extends React.Component<PropType> {
     });
   };
 
+  renderSecondaryPanel() {
+    const {organization} = this.props;
+
+    if (!organization.features.includes('measurements')) {
+      return null;
+    }
+
+    return (
+      <DividerHandlerManager.Consumer>
+        {(
+          dividerHandlerChildrenProps: DividerHandlerManager.DividerHandlerManagerChildrenProps
+        ) => {
+          const {dividerPosition} = dividerHandlerChildrenProps;
+          return (
+            <SecondaryHeader>
+              <ZoomControlPanel
+                style={{
+                  // the width of this panel is extended to include the width of the divider line
+                  width: `calc(${toPercent(dividerPosition)} + 1px)`,
+                }}
+              />
+              <MeasurementsPanel />
+            </SecondaryHeader>
+          );
+        }}
+      </DividerHandlerManager.Consumer>
+    );
+  }
+
   render() {
     const {
       spanTree,
@@ -375,10 +405,7 @@ class SpanTree extends React.Component<PropType> {
 
     return (
       <DividerHandlerManager.Provider interactiveLayerRef={this.traceViewRef}>
-        <SecondaryHeader>
-          <ZoomControlPanel> zoom</ZoomControlPanel>
-          <MeasurementsPanel />
-        </SecondaryHeader>
+        {this.renderSecondaryPanel()}
         <TraceViewContainer ref={this.traceViewRef}>
           {spanTree}
           {infoMessage}
@@ -392,13 +419,13 @@ const TraceViewContainer = styled('div')`
   overflow-x: hidden;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
-
-  outline: 1px solid red;
 `;
 
 const SecondaryHeader = styled('div')`
   background-color: ${p => p.theme.gray100};
   display: flex;
+
+  border-bottom: 1px solid ${p => p.theme.gray400};
 `;
 
 const ZoomControlPanel = styled('div')``;
