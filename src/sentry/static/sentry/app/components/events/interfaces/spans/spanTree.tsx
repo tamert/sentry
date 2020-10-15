@@ -30,7 +30,7 @@ import {
 } from './utils';
 import {DragManagerChildrenProps} from './dragManager';
 import SpanGroup from './spanGroup';
-import {SpanRowMessage} from './styles';
+import {SpanRowMessage, Padding} from './styles';
 import * as DividerHandlerManager from './dividerHandlerManager';
 import {FilterSpans} from './traceView';
 import {ActiveOperationFilter} from './filter';
@@ -394,7 +394,10 @@ class SpanTree extends React.Component<PropType> {
                   width: `calc(${toPercent(dividerPosition)} - 0.5px)`,
                 }}
               />
+              <Padding />
+              <Padding />
               <MeasurementsPanel event={event} generateBounds={this.generateBounds()} />
+              <Padding />
             </SecondaryHeader>
           );
         }}

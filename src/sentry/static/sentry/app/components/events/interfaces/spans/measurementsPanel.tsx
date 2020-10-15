@@ -39,7 +39,7 @@ class MeasurementsPanel extends React.PureComponent<Props> {
             <MeasurementMarker
               key={measurement.name}
               style={{
-                left: `calc(${toPercent(bounds.left || 0)} + 1.5px)`,
+                left: `${toPercent(bounds.left || 0)}`,
               }}
             />
           );

@@ -90,3 +90,7 @@ export function getHatchPattern(
 
   return null;
 }
+
+export const Padding = styled('div')<{width?: number}>`
+  width: ${p => p.width ?? 1}px;
+`;

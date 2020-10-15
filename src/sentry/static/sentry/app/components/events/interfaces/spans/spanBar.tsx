@@ -40,6 +40,7 @@ import {
   SpanRow,
   zIndex,
   getHatchPattern,
+  Padding,
 } from './styles';
 import * as DividerHandlerManager from './dividerHandlerManager';
 import * as CursorGuideHandler from './cursorGuideHandler';
@@ -373,7 +374,7 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
             <MeasurementMarker
               key={measurement.name}
               style={{
-                left: `calc(${toPercent(bounds.left || 0)} + 1px)`,
+                left: toPercent(bounds.left || 0),
               }}
             />
           );
@@ -809,12 +810,13 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
           {this.renderTitle()}
         </SpanRowCell>
         {this.renderDivider(dividerHandlerChildrenProps)}
+        <Padding />
         <SpanRowCell
           data-type="span-row-cell"
           showDetail={this.state.showDetail}
           showStriping={spanNumber % 2 !== 0}
           style={{
-            width: `calc(${toPercent(1 - dividerPosition)} - 0.5px)`,
+            width: `calc(${toPercent(1 - dividerPosition)} - 0.5px - 2px)`,
           }}
           onClick={() => {
             this.toggleDisplayDetail();
@@ -825,8 +827,8 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
               spanBarHatch={!!spanBarHatch}
               style={{
                 backgroundColor: spanBarColour,
-                left: `calc(${toPercent(bounds.left || 0)} + 1px)`,
-                width: `calc(${toPercent(bounds.width || 0)} - 2px)`,
+                left: toPercent(bounds.left || 0),
+                width: toPercent(bounds.width || 0),
               }}
             >
               <DurationPill
@@ -842,6 +844,7 @@ class SpanBar extends React.Component<SpanBarProps, SpanBarState> {
           {this.renderMeasurements()}
           {this.renderCursorGuide()}
         </SpanRowCell>
+        <Padding />
         {!this.state.showDetail && (
           <DividerLineGhostContainer
             style={{
