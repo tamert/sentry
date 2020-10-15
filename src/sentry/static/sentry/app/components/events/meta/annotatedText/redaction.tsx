@@ -11,4 +11,5 @@ export default Redaction;
 const Wrapper = styled('span')`
   background: rgba(255, 0, 0, 0.05);
   cursor: default;
+  vertical-align: middle;
 `;

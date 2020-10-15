@@ -54,6 +54,7 @@ const AnnotatedText = ({value, meta, ...props}: Props) => {
 
     return (
       <StyledTooltipError
+        containerDisplayMode="inline-flex"
         title={
           <TooltipTitle>
             <strong>
