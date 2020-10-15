@@ -53,6 +53,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.CLS]: {
     slug: 'cls',
     name: t('Cumulative Layout Shift'),
+    acronym: 'CLS',
     description: t(
       'The sum total of all individual layout shift scores for every unexpected layout shift that occurs during the entire lifespan of the page.'
     ),
@@ -62,6 +63,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.TTFB]: {
     slug: 'ttfb',
     name: t('Time to First Byte'),
+    acronym: 'TTFB',
     description: t(
       "The time that it takes for a user's browser to receive the first byte of page content."
     ),
@@ -71,6 +73,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.RequestTime]: {
     slug: 'ttfb.requesttime',
     name: t('Request Time'),
+    acronym: 'RT',
     description: t(
       'Captures the time spent making the request and receiving the first byte of the response.'
     ),
