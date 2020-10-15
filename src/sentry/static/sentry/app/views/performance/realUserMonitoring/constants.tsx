@@ -13,6 +13,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.FP]: {
     slug: 'fp',
     name: t('First Paint'),
+    acronym: 'FP',
     description: t(
       'Render time of the first pixel loaded in the viewport (may overlap with FCP).'
     ),
@@ -22,6 +23,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.FCP]: {
     slug: 'fcp',
     name: t('First Contentful Paint'),
+    acronym: 'FCP',
     description: t(
       'Render time of the first image, text or other DOM node in the viewport.'
     ),
@@ -31,6 +33,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.LCP]: {
     slug: 'lcp',
     name: t('Largest Contentful Paint'),
+    acronym: 'LCP',
     description: t(
       'Render time of the largest image, text or other DOM node in the viewport.'
     ),
@@ -40,6 +43,7 @@ export const WEB_VITAL_DETAILS: Record<WebVital, Vital> = {
   [WebVital.FID]: {
     slug: 'fid',
     name: t('First Input Delay'),
+    acronym: 'FID',
     description: t(
       'Response time of the browser to a user interaction (clicking, tapping, etc).'
     ),
