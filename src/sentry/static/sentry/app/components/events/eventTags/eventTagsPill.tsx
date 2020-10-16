@@ -4,16 +4,17 @@ import {Link} from 'react-router';
 import * as queryString from 'query-string';
 import {Query, Location} from 'history';
 
-import {EventTag, Meta} from 'app/types';
+import {EventTag} from 'app/types';
 import AnnotatedText from 'app/components/events/meta/annotatedText';
-import DeviceName from 'app/components/deviceName';
 import {isUrl} from 'app/utils';
 import Pill from 'app/components/pill';
 import VersionHoverCard from 'app/components/versionHoverCard';
 import TraceHoverCard from 'app/utils/discover/traceHoverCard';
-import Version from 'app/components/version';
 import {IconOpen, IconInfo} from 'app/icons';
 import ExternalLink from 'app/components/links/externalLink';
+import {getMeta} from 'app/components/events/meta/metaProxy';
+
+import EventTagsPillValue from './eventTagsPillValue';
 
 type Props = {
   tag: EventTag;
@@ -24,7 +25,6 @@ type Props = {
   orgId: string;
   projectId: string;
   hasQueryFeature: boolean;
-  meta?: Meta;
 };
 
 const EventTagsPill = ({
@@ -34,31 +34,28 @@ const EventTagsPill = ({
   projectId,
   streamPath,
   releasesPath,
-  meta,
   location,
   hasQueryFeature,
 }: Props) => {
   const locationSearch = `?${queryString.stringify(query)}`;
   const isRelease = tag.key === 'release';
   const isTrace = tag.key === 'trace';
+  const key = tag.key;
 
   return (
-    <Pill name={tag.key} value={tag.value}>
-      <Link
-        to={{
-          pathname: streamPath,
-          search: locationSearch,
-        }}
-      >
-        {isRelease ? (
-          <Version version={tag.value} anchor={false} tooltipRawVersion truncate />
-        ) : (
-          <AnnotatedText
-            value={tag.value && <DeviceName value={tag.value} />}
-            meta={meta}
-          />
-        )}
-      </Link>
+    <Pill
+      name={!tag.key ? <AnnotatedText value={key} meta={getMeta(tag, 'key')} /> : key}
+      value={tag.value}
+      type={!tag.key ? 'error' : undefined}
+    >
+      <EventTagsPillValue
+        key={key}
+        value={tag.value}
+        meta={getMeta(tag, 'value')}
+        streamPath={streamPath}
+        locationSearch={locationSearch}
+        isRelease={isRelease}
+      />
       {isUrl(tag.value) && (
         <ExternalLink href={tag.value} className="external-icon">
           <StyledIconOpen size="xs" />

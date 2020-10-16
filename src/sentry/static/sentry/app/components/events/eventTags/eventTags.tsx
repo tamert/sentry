@@ -8,7 +8,6 @@ import EventDataSection from 'app/components/events/eventDataSection';
 import {defined, generateQueryWithTag} from 'app/utils';
 import {t} from 'app/locale';
 import Pills from 'app/components/pills';
-import {getMeta} from 'app/components/events/meta/metaProxy';
 import space from 'app/styles/space';
 
 import EventTagsPill from './eventTagsPill';
@@ -48,7 +47,6 @@ const EventTags = ({
             query={generateQueryWithTag(location.query, tag)}
             streamPath={streamPath}
             releasesPath={releasesPath}
-            meta={getMeta(tag, 'value')}
             hasQueryFeature={hasQueryFeature}
           />
         ))}

@@ -54,7 +54,6 @@ const AnnotatedText = ({value, meta, ...props}: Props) => {
 
     return (
       <StyledTooltipError
-        containerDisplayMode="inline-flex"
         title={
           <TooltipTitle>
             <strong>
@@ -68,7 +67,7 @@ const AnnotatedText = ({value, meta, ...props}: Props) => {
           </TooltipTitle>
         }
       >
-        <IconWarning color="red500" />
+        <IconWarning color="red500" size="xs" />
       </StyledTooltipError>
     );
   };
@@ -84,7 +83,7 @@ const AnnotatedText = ({value, meta, ...props}: Props) => {
 export default AnnotatedText;
 
 const StyledTooltipError = styled(Tooltip)`
-  padding-left: ${space(0.75)};
+  margin-left: ${space(0.75)};
   vertical-align: middle;
 `;
 
